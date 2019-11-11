@@ -17,8 +17,25 @@ fi
 # Editors
 #
 
-export EDITOR='vi'
-export VISUAL='vi'
+if [[ (( $+commands[nvim] )) ]]; then
+  alias vi='nvim'
+  alias vim='nvim'
+fi
+
+if [[ (( $+commands[emacs] )) ]]; then
+  emacst () { $commands[emacs] -nw $* }
+  emacs ()  { $commands[emacs] $* &>/dev/null &| }
+  alias et='emacst'
+  EDITOR='emacst'
+  VISUAL='emacst'
+elif [[ (( $+commands[nvim] )) ]]; then
+  EDITOR='nvim'
+  VISUAL='nvim'
+else
+  EDITOR='vi'
+  VISUAL='vi'
+fi
+
 export PAGER='less'
 
 #
@@ -47,14 +64,23 @@ path=(
   $path
 )
 
-# direnv
-[[ -d $HOME/.local/bin ]] && path=( $path $HOME/.local/bin )
-(( $+commands[direnv] )) && eval "$(direnv hook zsh)"
 
-# unsafe paths
-(( $+commands[ros] )) && path=( $path $HOME/.roswell/bin )
-(( $+commands[go] )) && path=( $path $(go env GOPATH)/bin )
-[[ -x $HOME/.emacs.d/bin/doom ]] && path=( $path $HOME/.emacs.d/bin )
+# interactive sessions only
+if [[ -o LOGIN ]]; then
+  # direnv
+  [[ -d $HOME/.local/bin ]] && path=( $path $HOME/.local/bin )
+  (( $+commands[direnv] )) && eval "$(direnv hook zsh)"
+
+  # roswell (lisp)
+  (( $+commands[ros] )) && path=( $path $HOME/.roswell/bin )
+
+  # go
+  (( $+commands[go] )) && path=( $path $(go env GOPATH)/bin )
+
+  # doom emacs
+  [[ -x $HOME/.emacs.d/bin/doom ]] && path=( $path $HOME/.emacs.d/bin )
+fi
+
 
 #
 # Less
@@ -63,8 +89,8 @@ path=(
 # Set the default Less options.
 # Mouse-wheel scrolling has been disabled by -X (disable screen clearing).
 # Remove -X and -F (exit if the content fits on one screen) to enable it.
-#export LESS='-F -g -i -M -R -S -w -X -z-4'
-export LESS='-F -i -M -R -S -w -X -z-4'
+export LESS='-F -g -i -M -R -S -w -X -z-4'
+#export LESS='-F -i -M -R -S -w -X -z-4'
 
 # Set the Less input preprocessor.
 # Try both `lesspipe` and `lesspipe.sh` as either might exist on a system.
