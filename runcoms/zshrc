@@ -30,27 +30,18 @@ if [[ (( $+commands[nvim] )) ]]; then
 fi
 
 if [[ (( $+commands[emacs] )) ]]; then
-  emacst () { $commands[emacs] -nw $* }
-  emacs ()  { $commands[emacs] $* &>/dev/null &| }
-  alias et='emacst'
-  alias e='emacs'
-  EDITOR='emacst'
-  VISUAL='emacst'
-elif [[ (( $+commands[nvim] )) ]]; then
-  EDITOR='nvim'
-  VISUAL='nvim'
-else
-  EDITOR='vi'
-  VISUAL='vi'
+  (( $+commands[emacst] )) && alias et='emacst'
+  (( $+commands[emacsg] )) && alias e='emacsg'
 fi
 
 # interactive sessions only
 if [[ -o LOGIN ]]; then
+  [[ -d $HOME/.local/bin ]] && path=( $path $HOME/.local/bin )
+
   (( $+commands[pyenv] )) && eval "$(pyenv init - --no-rehash zsh)"
   (( $+commands[rbenv] )) && eval "$(rbenv init - --no-rehash zsh)"
 
   # direnv
-  [[ -d $HOME/.local/bin ]] && path=( $path $HOME/.local/bin )
   (( $+commands[direnv] )) && eval "$(direnv hook zsh)"
 
   # roswell (lisp)
