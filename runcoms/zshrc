@@ -24,32 +24,24 @@ fi
 
 ##
 
-if [[ (( $+commands[nvim] )) ]]; then
+[[ -d $HOME/.local/bin ]] && path=( $path $HOME/.local/bin )
+
+(( $+commands[pyenv] )) && eval "$(pyenv init - --no-rehash zsh)"
+(( $+commands[rbenv] )) && eval "$(rbenv init - --no-rehash zsh)"
+(( $+commands[direnv] )) && eval "$(direnv hook zsh)"
+
+(( $+commands[ros] )) && path=( $path $HOME/.roswell/bin )
+(( $+commands[go] )) && path=( $path $(go env GOPATH)/bin )
+# doom emacs
+[[ -x "$HOME/.emacs.d/bin/doom" ]] && path=( $path $HOME/.emacs.d/bin )
+
+if (( $+commands[nvim] )); then
   alias vi='nvim'
   alias vim='nvim'
 fi
 
-if [[ (( $+commands[emacs] )) ]]; then
+if (( $+commands[emacs] )); then
   (( $+commands[emacst] )) && alias et='emacst'
   (( $+commands[emacsg] )) && alias e='emacsg'
 fi
 
-# interactive sessions only
-if [[ -o LOGIN ]]; then
-  [[ -d $HOME/.local/bin ]] && path=( $path $HOME/.local/bin )
-
-  (( $+commands[pyenv] )) && eval "$(pyenv init - --no-rehash zsh)"
-  (( $+commands[rbenv] )) && eval "$(rbenv init - --no-rehash zsh)"
-
-  # direnv
-  (( $+commands[direnv] )) && eval "$(direnv hook zsh)"
-
-  # roswell (lisp)
-  (( $+commands[ros] )) && path=( $path $HOME/.roswell/bin )
-
-  # go
-  (( $+commands[go] )) && path=( $path $(go env GOPATH)/bin )
-
-  # doom emacs
-  [[ -x $HOME/.emacs.d/bin/doom ]] && path=( $path $HOME/.emacs.d/bin )
-fi
