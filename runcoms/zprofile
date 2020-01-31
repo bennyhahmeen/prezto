@@ -17,9 +17,9 @@ fi
 # Editors
 #
 
-if [[ (( $+commands[emacs] && $+commands[emacst] )) ]]; then
-  export EDITOR='emacst'
-  export VISUAL='emacst'
+if [[ (( $+commands[emacs] )) ]]; then
+  export EDITOR="$commands[emacs] -nw"
+  export VISUAL="$commands[emacs] -nw"
 elif [[ (( $+commands[nvim] )) ]]; then
   export EDITOR='nvim'
   export VISUAL='nvim'
