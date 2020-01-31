@@ -22,3 +22,14 @@ fi
 
 # Customize to your needs...
 
+if (( $+commands[nvim] )); then
+  alias vi='nvim'
+  alias vim='nvim'
+fi
+
+if (( $+commands[emacs] )); then
+  alias et='\emacs -nw'
+  alias ec='emacsclient -a "" -n -c'
+  unalias e;  alias e='ec'
+  alias emacs='ec'
+fi
