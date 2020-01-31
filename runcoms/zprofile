@@ -59,6 +59,29 @@ path=(
   $path
 )
 
+[[ -d $HOME/.local/bin ]] && path=( $path $HOME/.local/bin )
+[[ -d $HOME/.pyenv/bin ]] && path=( $path $HOME/.pyenv/bin )
+[[ -x $HOME/.emacs.d/bin/doom ]] && path=( $path $HOME/.emacs.d/bin )
+
+(( $+commands[pyenv] )) && eval "$(pyenv init - --no-rehash zsh)"
+(( $+commands[rbenv] )) && eval "$(rbenv init - --no-rehash zsh)"
+(( $+commands[direnv] )) && eval "$(direnv hook zsh)"
+
+(( $+commands[ros] )) && path=( $path $HOME/.roswell/bin )
+(( $+commands[go] )) && path=( $path $(go env GOPATH)/bin )
+
+if (( $+commands[nvim] )); then
+  alias vi='nvim'
+  alias vim='nvim'
+fi
+
+if (( $+commands[emacs] )); then
+  alias et='\emacs -nw'
+  alias ec='emacsclient -a "" -n -c'
+  unalias e;  alias e='ec'
+  alias emacs='ec'
+fi
+
 #
 # Less
 #
@@ -72,4 +95,10 @@ export LESS='-F -g -i -M -R -S -w -X -z-4'
 # Try both `lesspipe` and `lesspipe.sh` as either might exist on a system.
 if (( $#commands[(i)lesspipe(|.sh)] )); then
   export LESSOPEN="| /usr/bin/env $commands[(i)lesspipe(|.sh)] %s 2>&-"
+fi
+
+# WSL
+if [[ -v WSLENV ]]; then
+  export LIBGL_ALWAYS_INDIRECT=1
+  export DISPLAY=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null):0
 fi
