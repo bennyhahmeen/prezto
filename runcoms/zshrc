@@ -22,26 +22,3 @@ fi
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-##
-
-[[ -d $HOME/.local/bin ]] && path=( $path $HOME/.local/bin )
-
-(( $+commands[pyenv] )) && eval "$(pyenv init - --no-rehash zsh)"
-(( $+commands[rbenv] )) && eval "$(rbenv init - --no-rehash zsh)"
-(( $+commands[direnv] )) && eval "$(direnv hook zsh)"
-
-(( $+commands[ros] )) && path=( $path $HOME/.roswell/bin )
-(( $+commands[go] )) && path=( $path $(go env GOPATH)/bin )
-# doom emacs
-[[ -x "$HOME/.emacs.d/bin/doom" ]] && path=( $path $HOME/.emacs.d/bin )
-
-if (( $+commands[nvim] )); then
-  alias vi='nvim'
-  alias vim='nvim'
-fi
-
-if (( $+commands[emacs] )); then
-  (( $+commands[emacst] )) && alias et='emacst'
-  (( $+commands[emacsg] )) && alias e='emacsg'
-fi
-
