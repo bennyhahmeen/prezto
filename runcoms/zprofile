@@ -60,6 +60,7 @@ path=(
 )
 
 [[ -d $HOME/.local/bin ]] && path=( $path $HOME/.local/bin )
+[[ -r $HOME/.nix-profile/etc/profile.d/nix.sh ]] && source $HOME/.nix-profile/etc/profile.d/nix.sh
 [[ -d $HOME/.pyenv/bin ]] && path=( $path $HOME/.pyenv/bin )
 [[ -x $HOME/.emacs.d/bin/doom ]] && path=( $path $HOME/.emacs.d/bin )
 
